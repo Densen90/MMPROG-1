@@ -1,15 +1,18 @@
-//uniform vec3 iMouse;
 uniform vec2 iResolution;
 uniform float iGlobalTime;
 in vec2 uv;
 		
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	vec2 uv = mod(uv * 10.0, 1.0);
-	float a = length(uv - vec2(0.5));
+	vec2 pos = uv - 0.5;
+	pos *= 30.0;
+	pos.x *= sin(iGlobalTime);
+	pos.y *= sin(iGlobalTime) * cos(iGlobalTime * 0.1);
+	pos += 0.5;
+	pos = fract(pos);
+	float a = length(pos - vec2(0.5));
 	a = pow(1.0 - a, 12);
-//	a = mod(a, 10.0);
-	fragColor = vec4(a, a, a, 1.0);
+	fragColor = vec4(a * 10.0 * abs(sin(iGlobalTime * 0.5)), 2.0 * a, 5.0 * a, 1.0);	
 }
 
 void main()
