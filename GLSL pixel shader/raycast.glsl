@@ -1,14 +1,5 @@
-uniform vec3 iMouse;
 uniform vec2 iResolution;
 uniform float iGlobalTime;
-varying vec2 uv;
-
-float time=iGlobalTime;
-
-float distFunc(vec3 p)
-{
-    return length(mod(p+vec3(0,0,mod(-time*19.,4.)),4.)-2.)-.4;
-}
 
 float quad(float a)
 {
