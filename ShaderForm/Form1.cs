@@ -80,7 +80,7 @@ namespace ShaderForm
 				height = glControl.Height / g;
 			}
 			catch(Exception) { };
-			visual.update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, mousePos.Y, mouseDown, width, height);
+			visual.update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, height - mousePos.Y, mouseDown, width, height);
 			visual.draw(glControl.Width, glControl.Height);
 			glControl.SwapBuffers();
 		}
