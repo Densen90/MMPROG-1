@@ -43,6 +43,7 @@ namespace ShaderForm
 			surface = new GLTools.Texture(1, 1);
 
 			string sVertexShader = @"
+				#version 130
 				varying vec2 uv;
 				void main() {
 					gl_Position = gl_Vertex;
