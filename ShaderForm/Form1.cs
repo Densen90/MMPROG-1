@@ -56,7 +56,7 @@ namespace ShaderForm
 			}
 			catch (Exception e)
 			{
-				errorLog.Text = e.Message;
+				errorLog.Text = "Error while compiling shader" + Environment.NewLine + e.Message;
 				errorLog.Visible = true;
 				//load default shader
 				visual.loadShader("");
@@ -85,9 +85,17 @@ namespace ShaderForm
 			glControl.SwapBuffers();
 		}
 
-		private void glControl_Load(object sender, EventArgs e)
+		private void glControl_Load(object sender, EventArgs eArgs)
 		{
-			visual = new Visual();
+			try
+			{
+				visual = new Visual();
+			}
+			catch (Exception e)
+			{
+				errorLog.Text = "Error while compiling default shader (something is seriously wrong)!" + Environment.NewLine + e.Message;
+				errorLog.Visible = true;
+			}
 		}
 
 		void Application_Idle(object sender, EventArgs e)

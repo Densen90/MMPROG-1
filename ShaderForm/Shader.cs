@@ -6,15 +6,39 @@ using OpenTK.Graphics.OpenGL;
 namespace GLTools
 {
 	/// <summary>
-	/// Exception for shader compilation errors
+	/// Exception for vertex compilation errors
 	/// </summary>
-	public class ShaderCompileException : Exception
+	public class VertexShaderCompileException : Exception
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ShaderCompileException"/> class.
+		/// Initializes a new instance of the <see cref="VertexShaderCompileException"/> class.
 		/// </summary>
 		/// <param name="msg">The error msg.</param>
-		public ShaderCompileException(string msg) : base(msg) { }
+		public VertexShaderCompileException(string msg) : base(msg) { }
+	}
+
+	/// <summary>
+	/// Exception for fragment shader compilation errors
+	/// </summary>
+	public class FragmentShaderCompileException : Exception
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FragmentShaderCompileException"/> class.
+		/// </summary>
+		/// <param name="msg">The error msg.</param>
+		public FragmentShaderCompileException(string msg) : base(msg) { }
+	}
+	
+	/// <summary>
+	/// Exception for shader link errors
+	/// </summary>
+	public class ShaderLinkException : Exception
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ShaderLinkException"/> class.
+		/// </summary>
+		/// <param name="msg">The error msg.</param>
+		public ShaderLinkException(string msg) : base(msg) { }
 	}
 
 	/// <summary>
@@ -38,7 +62,7 @@ namespace GLTools
 		public static Shader LoadFromStrings(string sVertexShd_, string sFragmentShd_)
 		{
 			Shader shd = new Shader();
-			shd.m_ProgramID = CreaterShader(sVertexShd_, sFragmentShd_);
+			shd.m_ProgramID = CompileLink(sVertexShd_, sFragmentShd_);
 			if (!shd.IsLoaded())
 			{
 				shd = null;
@@ -110,7 +134,7 @@ namespace GLTools
 			return input.Replace("\n", Environment.NewLine);
 		}
 
-		private static int CreaterShader(string sVertexShd_, string sFragmentShd_)
+		private static int CompileLink(string sVertexShd_, string sFragmentShd_)
 		{
 			int program = 0;
 			int vertexObject = 0;
@@ -126,7 +150,7 @@ namespace GLTools
 				if (1 != status_code)
 				{
 					string log = CorrectLineEndings(GL.GetShaderInfoLog(vertexObject));
-					throw new ShaderCompileException(log);
+					throw new VertexShaderCompileException(log);
 				}
 			}
 			if (!string.IsNullOrEmpty(sFragmentShd_))
@@ -139,7 +163,7 @@ namespace GLTools
 				if (1 != status_code)
 				{
 					string log = CorrectLineEndings(GL.GetShaderInfoLog(fragmentObject));
-					throw new ShaderCompileException(log);
+					throw new FragmentShaderCompileException(log);
 				}
 			}
 			program = GL.CreateProgram();
@@ -151,13 +175,20 @@ namespace GLTools
 			{
 				GL.AttachShader(program, fragmentObject);
 			}
-			GL.LinkProgram(program);
+			try
+			{
+				GL.LinkProgram(program);
+			}
+			catch (Exception e)
+			{
+				throw new ShaderLinkException("Unknown link error!");
+			}
 			GL.GetProgram(program, GetProgramParameterName.LinkStatus, out status_code);
 			if (1 != status_code)
 			{
 				string log = CorrectLineEndings(GL.GetProgramInfoLog(program));
 				GL.DeleteProgram(program);
-				throw new ShaderCompileException(log);
+				throw new ShaderLinkException(log);
 			}
 			GL.UseProgram(0);
 			return program;

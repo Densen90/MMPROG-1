@@ -6,11 +6,16 @@ using System.IO;
 
 namespace ShaderForm
 {
+	public class ShaderLoadException : Exception
+	{
+		public ShaderLoadException(string msg) : base(msg) { }
+	}
+
 	class Visual
 	{
 		private int bufferQuad;
 		private Shader shader;
-		private Shader shaderCopy;
+		private Shader shaderCopyToScreen;
 		private Texture surface;
 
 		public Visual()
@@ -54,7 +59,7 @@ namespace ShaderForm
 			void main() {
 				gl_FragColor = texture(tex, uv);
 			}";
-			shaderCopy = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
+			shaderCopyToScreen = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
 
 			loadShader("");
 		}
@@ -105,18 +110,33 @@ namespace ShaderForm
 			{
 				sFragmentShd = sr.ReadToEnd();
 			}
-			shader = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
+			try
+			{
+				shader = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
+			}
+			catch(VertexShaderCompileException e)
+			{
+				throw new ShaderLoadException("Vertex shader compilation failed!" + Environment.NewLine + e.Message);
+			}
+			catch(FragmentShaderCompileException e)
+			{
+				throw new ShaderLoadException("Fragment shader compilation failed!" + Environment.NewLine + e.Message);
+			}
+			catch (ShaderLinkException e)
+			{
+				throw new ShaderLoadException("Shader link failed!" + Environment.NewLine + e.Message);
+			}
 		}
 
 		public void draw(int width, int height)
 		{
 			GL.Viewport(0, 0, width, height);
 			surface.BeginUse();
-			shaderCopy.Begin();
+			shaderCopyToScreen.Begin();
 			GL.BindVertexArray(bufferQuad);
 			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 			GL.BindVertexArray(0);
-			shaderCopy.End();
+			shaderCopyToScreen.End();
 			surface.EndUse();
 		}
 	}
