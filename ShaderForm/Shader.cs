@@ -188,7 +188,7 @@ namespace GLTools
 			{
 				GL.LinkProgram(program);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				throw new ShaderLinkException("Unknown link error!");
 			}

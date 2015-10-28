@@ -11,6 +11,7 @@ namespace ShaderForm
 		private Stopwatch sw = new Stopwatch(); // available to all event handlers
 		private Visual visual;
 		private string shaderFileName;
+		private string textureFileName;
 		private long lastTime = 0;
 		private int frames = 0;
 		private bool mouseDown = false;
@@ -21,7 +22,7 @@ namespace ShaderForm
 			InitializeComponent();
 		}
 
-		private void glControl_DragEnter(object sender, DragEventArgs e)
+		private void dragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Link;
 		}
@@ -32,6 +33,16 @@ namespace ShaderForm
 			foreach (string file in files)
 			{
 				loadShader(file);
+				return;
+			}
+		}
+
+		private void menuStrip_DragDrop(object sender, DragEventArgs e)
+		{
+			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+			foreach (string file in files)
+			{
+				loadTexture(file);
 				return;
 			}
 		}
@@ -85,6 +96,20 @@ namespace ShaderForm
 			sw.Start();
 			Application_Idle(null, null);
 			glControl.Invalidate();
+		}
+
+		private void loadTexture(string file)
+		{
+			try
+			{
+				visual.loadTexture(file);
+				textureFileName = file;
+				texture1.Text = textureFileName;
+			}
+			catch(Exception e)
+			{
+				texture1.Text = e.Message;
+			}
 		}
 
 		private void glControl_Paint(object sender, PaintEventArgs e)
@@ -146,6 +171,7 @@ namespace ShaderForm
 				Top = Convert.ToInt32(keyApp.GetValue("top", Top));
 				Left = Convert.ToInt32(keyApp.GetValue("left", Left));
 				shaderFileName = Convert.ToString(keyApp.GetValue("shaderFileName", ""));
+				textureFileName = Convert.ToString(keyApp.GetValue("textureFileName", ""));
 				play.Checked = Convert.ToBoolean(keyApp.GetValue("play", false));
 				string granularity = Convert.ToString(keyApp.GetValue("granularity", this.granularity.Text));
 				this.granularity.SelectedIndex = this.granularity.FindString(granularity); 
@@ -154,6 +180,7 @@ namespace ShaderForm
 				{
 					shaderFileName = arguments[1];
 				}
+				loadTexture(textureFileName);
 				loadShader(shaderFileName);
 			}
 			catch (Exception ex)
@@ -177,6 +204,7 @@ namespace ShaderForm
 				keyApp.SetValue("top", Top);
 				keyApp.SetValue("left", Left);
 				keyApp.SetValue("shaderFileName", shaderFileName);
+				keyApp.SetValue("textureFileName", textureFileName);
 				keyApp.SetValue("play", play.Checked);
 				keyApp.SetValue("granularity", this.granularity.Text);
 			}
@@ -188,6 +216,7 @@ namespace ShaderForm
 
 		private void reload_Click(object sender, EventArgs e)
 		{
+			loadTexture(textureFileName);
 			loadShader(shaderFileName);
 		}
 

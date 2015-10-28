@@ -11,9 +11,10 @@ namespace ShaderForm
 		public ShaderLoadException(string msg) : base(msg) { }
 	}
 
-	class Visual
+	class Visual : IDisposable
 	{
 		private int bufferQuad;
+		private Texture texture1;
 		private Shader shader;
 		private Shader shaderCopyToScreen;
 		private FBO surface;
@@ -61,6 +62,7 @@ namespace ShaderForm
 			}";
 			shaderCopyToScreen = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
 			shader = new Shader();
+			texture1 = new Texture();
 		}
 
 		public void update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
@@ -71,6 +73,7 @@ namespace ShaderForm
 
 			var resolution = new Vector2(width, height);
 			GL.Viewport(0, 0, width, height);
+			texture1.BeginUse();
 			shader.Begin();
 			GL.Uniform1(shader.GetUniformLocation("iGlobalTime"), timeSec);
 			GL.Uniform2(shader.GetUniformLocation("iResolution"), resolution);
@@ -80,8 +83,14 @@ namespace ShaderForm
 			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 			GL.BindVertexArray(0);
 			shader.End();
+			texture1.EndUse();
 
 			surface.EndUpdate();
+		}
+
+		public void loadTexture(string fileName)
+		{
+			texture1 = TextureLoader.FromFile(fileName);
 		}
 
 		public void loadFragmentShader(string fileName)
@@ -132,6 +141,14 @@ namespace ShaderForm
 			GL.BindVertexArray(0);
 			shaderCopyToScreen.End();
 			surface.EndUse();
+		}
+
+		public void Dispose()
+		{
+			shader.Dispose();
+			shaderCopyToScreen.Dispose();
+			texture1.Dispose();
+			surface.Dispose();
 		}
 	}
 }

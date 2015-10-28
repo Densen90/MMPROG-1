@@ -57,7 +57,7 @@
 			this.glControl.VSync = true;
 			this.glControl.Load += new System.EventHandler(this.glControl_Load);
 			this.glControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.glControl_DragDrop);
-			this.glControl.DragEnter += new System.Windows.Forms.DragEventHandler(this.glControl_DragEnter);
+			this.glControl.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
 			this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
 			this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
 			this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
@@ -86,10 +86,11 @@
 			this.errorLog.TabIndex = 1;
 			this.errorLog.Visible = false;
 			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.glControl_DragDrop);
-			this.errorLog.DragEnter += new System.Windows.Forms.DragEventHandler(this.glControl_DragEnter);
+			this.errorLog.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
 			// 
 			// menuStrip
 			// 
+			this.menuStrip.AllowDrop = true;
 			this.menuStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reload,
@@ -103,6 +104,8 @@
 			this.menuStrip.Size = new System.Drawing.Size(353, 27);
 			this.menuStrip.TabIndex = 2;
 			this.menuStrip.Text = "menuStrip1";
+			this.menuStrip.DragDrop += new System.Windows.Forms.DragEventHandler(this.menuStrip_DragDrop);
+			this.menuStrip.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
 			// 
 			// reload
 			// 
