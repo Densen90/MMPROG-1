@@ -37,6 +37,7 @@
 			this.fps = new System.Windows.Forms.ToolStripMenuItem();
 			this.elapsedTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.granularity = new System.Windows.Forms.ToolStripComboBox();
+			this.texture1 = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -95,7 +96,8 @@
             this.play,
             this.fps,
             this.elapsedTime,
-            this.granularity});
+            this.granularity,
+            this.texture1});
 			this.menuStrip.Location = new System.Drawing.Point(0, 294);
 			this.menuStrip.Name = "menuStrip";
 			this.menuStrip.Size = new System.Drawing.Size(353, 27);
@@ -149,6 +151,12 @@
 			this.granularity.Size = new System.Drawing.Size(75, 23);
 			this.granularity.SelectedIndexChanged += new System.EventHandler(this.granularity_SelectedIndexChanged);
 			// 
+			// texture1
+			// 
+			this.texture1.Name = "texture1";
+			this.texture1.Size = new System.Drawing.Size(61, 23);
+			this.texture1.Text = "texture1";
+			// 
 			// FormMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -185,6 +193,7 @@
 		private System.Windows.Forms.ToolStripMenuItem elapsedTime;
 		private System.Windows.Forms.ToolStripMenuItem fps;
 		private System.Windows.Forms.ToolStripComboBox granularity;
+		private System.Windows.Forms.ToolStripMenuItem texture1;
     }
 }
 

@@ -5,10 +5,19 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GLTools
 {
+	public class ShaderException : Exception
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ShaderException"/> class.
+		/// </summary>
+		/// <param name="msg">The error msg.</param>
+		public ShaderException(string msg) : base(msg) { }
+	}
+
 	/// <summary>
 	/// Exception for vertex compilation errors
 	/// </summary>
-	public class VertexShaderCompileException : Exception
+	public class VertexShaderCompileException : ShaderException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VertexShaderCompileException"/> class.
@@ -20,7 +29,7 @@ namespace GLTools
 	/// <summary>
 	/// Exception for fragment shader compilation errors
 	/// </summary>
-	public class FragmentShaderCompileException : Exception
+	public class FragmentShaderCompileException : ShaderException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FragmentShaderCompileException"/> class.
@@ -32,7 +41,7 @@ namespace GLTools
 	/// <summary>
 	/// Exception for shader link errors
 	/// </summary>
-	public class ShaderLinkException : Exception
+	public class ShaderLinkException : ShaderException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShaderLinkException"/> class.

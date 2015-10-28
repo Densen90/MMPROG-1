@@ -52,14 +52,32 @@ namespace ShaderForm
 				fileSystemWatcher.Filter = Path.GetFileName(fileName);
 				fileSystemWatcher.Path = Path.GetDirectoryName(fileName);
 				fileSystemWatcher.EnableRaisingEvents = true;
-				visual.loadShader(fileName);
+				visual.loadFragmentShader(fileName);
 			}
-			catch (Exception e)
+			catch (ShaderLoadException e)
 			{
 				errorLog.Text = "Error while compiling shader" + Environment.NewLine + e.Message;
 				errorLog.Visible = true;
-				//load default shader
-				visual.loadShader("");
+			}
+			catch (FileNotFoundException e)
+			{
+				errorLog.Text = e.Message;
+				errorLog.Visible = true;
+			}
+			catch (Exception e)
+			{
+				errorLog.Text = "Error while accessing shaderfile! Will retry shortly..." + Environment.NewLine + e.Message;
+				errorLog.Visible = true;
+				//try reload in 2 seconds, because sometimes file system is still busy
+				Timer timer = new Timer();
+				timer.Interval = 2000;
+				timer.Tick += (a, b) =>
+				{
+					timer.Stop();
+					timer.Dispose();
+					loadShader(fileName);
+				};
+				timer.Start();
 			}
 			sw.Reset();
 			frames = 0;
@@ -93,7 +111,7 @@ namespace ShaderForm
 			}
 			catch (Exception e)
 			{
-				errorLog.Text = "Error while compiling default shader (something is seriously wrong)!" + Environment.NewLine + e.Message;
+				errorLog.Text = "Error while creating visual (something is seriously wrong)!" + Environment.NewLine + e.Message;
 				errorLog.Visible = true;
 			}
 		}

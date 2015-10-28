@@ -16,7 +16,7 @@ namespace ShaderForm
 		private int bufferQuad;
 		private Shader shader;
 		private Shader shaderCopyToScreen;
-		private Texture surface;
+		private FBO surface;
 
 		public Visual()
 		{
@@ -45,7 +45,7 @@ namespace ShaderForm
 			GL.Disable(EnableCap.DepthTest);
 			GL.ClearColor(1, 0, 0, 0);
 
-			surface = new GLTools.Texture(1, 1);
+			surface = new GLTools.FBO(1, 1);
 
 			string sVertexShader = @"
 				varying vec2 uv;
@@ -60,13 +60,13 @@ namespace ShaderForm
 				gl_FragColor = texture(tex, uv);
 			}";
 			shaderCopyToScreen = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
-
-			loadShader("");
+			shader = new Shader();
 		}
 
 		public void update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
 		{
-			surface = GLTools.Texture.Resize(ref surface, width, height);
+			if (!shader.IsLoaded()) return;
+			surface = GLTools.FBO.Resize(ref surface, width, height);
 			surface.BeginUpdate();
 
 			var resolution = new Vector2(width, height);
@@ -84,7 +84,7 @@ namespace ShaderForm
 			surface.EndUpdate();
 		}
 
-		public void loadShader(string fileName)
+		public void loadFragmentShader(string fileName)
 		{
 			string sVertexShader = @"
 				#version 130				
@@ -96,22 +96,16 @@ namespace ShaderForm
 					uv = gl_Vertex.xy * 0.5f + 0.5f;
 					fragCoord = uv * iResolution;
 				}";
-			string sFragmentShd = @"
-			varying vec2 uv;
-			void main() {
-				vec2 uv10 = floor(uv * 10.0f);
-				if(1.0 > mod(uv10.x + uv10.y, 2.0f))
-					discard;		
-				gl_FragColor = vec4(1, 1, 0, 0);
-			}";
 
-			if (File.Exists(fileName))
-			using (StreamReader sr = new StreamReader(fileName))
+			if (!File.Exists(fileName))
 			{
-				sFragmentShd = sr.ReadToEnd();
+				throw new FileNotFoundException("Could not find fragment shader file '" + fileName + "'");
 			}
 			try
 			{
+				StreamReader sr = new StreamReader(fileName);
+				string sFragmentShd = sr.ReadToEnd();
+				sr.Dispose();
 				shader = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
 			}
 			catch(VertexShaderCompileException e)

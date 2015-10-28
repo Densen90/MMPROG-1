@@ -4,12 +4,9 @@ using System;
 
 namespace GLTools
 {
-	/// <summary>
-	/// Gl Texture class that allows render to texture.
-	/// </summary>
-	public class Texture : IDisposable
+	public class FBO : IDisposable
 	{
-		public Texture(int width, int height)
+		public FBO(int width, int height)
 		{
 			this.Width = width;
 			this.Height = height;
@@ -115,12 +112,12 @@ namespace GLTools
 			GL.DeleteFramebuffers(1, ref this.m_FBOHandle);
 		}
 
-		public static Texture Resize(ref Texture surface, int width, int height)
+		public static FBO Resize(ref FBO surface, int width, int height)
 		{
 			if(width != surface.Width || height != surface.Height)
 			{
 				surface.Dispose();
-				surface = new Texture(width, height);
+				surface = new FBO(width, height);
 			}
 			return surface;
 		}
