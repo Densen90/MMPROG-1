@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 
 namespace GLTools
 {
-	public class ShaderException : Exception
+    public class ShaderException : Exception
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShaderException"/> class.

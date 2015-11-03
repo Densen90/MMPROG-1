@@ -52,7 +52,7 @@
 			this.glControl.Location = new System.Drawing.Point(0, 0);
 			this.glControl.Margin = new System.Windows.Forms.Padding(4);
 			this.glControl.Name = "glControl";
-			this.glControl.Size = new System.Drawing.Size(353, 297);
+			this.glControl.Size = new System.Drawing.Size(353, 294);
 			this.glControl.TabIndex = 0;
 			this.glControl.VSync = true;
 			this.glControl.Load += new System.EventHandler(this.glControl_Load);
@@ -82,7 +82,7 @@
 			this.errorLog.Name = "errorLog";
 			this.errorLog.ReadOnly = true;
 			this.errorLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.errorLog.Size = new System.Drawing.Size(353, 297);
+			this.errorLog.Size = new System.Drawing.Size(353, 294);
 			this.errorLog.TabIndex = 1;
 			this.errorLog.Visible = false;
 			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.glControl_DragDrop);
@@ -147,6 +147,7 @@
 			// 
 			this.granularity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.granularity.Items.AddRange(new object[] {
+            "0.5",
             "1",
             "2",
             "4"});

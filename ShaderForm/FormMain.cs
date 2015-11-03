@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -104,7 +105,7 @@ namespace ShaderForm
 			{
 				visual.loadTexture(file);
 				textureFileName = file;
-				texture1.Text = textureFileName;
+				texture1.Text = Path.GetFileName(textureFileName);
 			}
 			catch(Exception e)
 			{
@@ -118,9 +119,9 @@ namespace ShaderForm
 			int height = glControl.Height;
 			try 
 			{
-				int g = int.Parse(granularity.Text);
-				width = glControl.Width / g;
-				height = glControl.Height / g;
+				float g = float.Parse(granularity.Text, CultureInfo.InvariantCulture);
+				width = (int)Math.Round(glControl.Width / g);
+				height = (int)Math.Round(glControl.Height / g);
 			}
 			catch(Exception) { };
 			visual.update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, height - mousePos.Y, mouseDown, width, height);

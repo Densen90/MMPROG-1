@@ -1,10 +1,9 @@
-﻿using System.Drawing;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace GLTools
 {
-	public class FBO : IDisposable
+    public class FBO : IDisposable
 	{
 		public FBO(int width, int height)
 		{
