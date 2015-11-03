@@ -23,37 +23,34 @@ namespace ShaderForm
 			InitializeComponent();
 		}
 
-		private void dragEnter(object sender, DragEventArgs e)
+		private void GlControl_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Link;
 		}
 
-		private void glControl_DragDrop(object sender, DragEventArgs e)
+		private void GlControl_DragDrop(object sender, DragEventArgs e)
 		{
 			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 			foreach (string file in files)
 			{
-				loadShader(file);
+				if (Visual.IsTexture(file))
+				{
+					LoadTexture(file);
+				}
+				else
+				{
+					LoadShader(file);
+				}
 				return;
 			}
 		}
 
-		private void menuStrip_DragDrop(object sender, DragEventArgs e)
+		private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
-			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			foreach (string file in files)
-			{
-				loadTexture(file);
-				return;
-			}
+			LoadShader(e.FullPath);
 		}
 
-		private void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
-		{
-			loadShader(e.FullPath);
-		}
-
-		private void loadShader(string fileName)
+		private void LoadShader(string fileName)
 		{
 			errorLog.Visible = false;
 			//try load new
@@ -64,7 +61,7 @@ namespace ShaderForm
 				fileSystemWatcher.Filter = Path.GetFileName(fileName);
 				fileSystemWatcher.Path = Path.GetDirectoryName(fileName);
 				fileSystemWatcher.EnableRaisingEvents = true;
-				visual.loadFragmentShader(fileName);
+				visual.LoadFragmentShader(fileName);
 			}
 			catch (ShaderLoadException e)
 			{
@@ -87,7 +84,7 @@ namespace ShaderForm
 				{
 					timer.Stop();
 					timer.Dispose();
-					loadShader(fileName);
+					LoadShader(fileName);
 				};
 				timer.Start();
 			}
@@ -99,11 +96,11 @@ namespace ShaderForm
 			glControl.Invalidate();
 		}
 
-		private void loadTexture(string file)
+		private void LoadTexture(string file)
 		{
 			try
 			{
-				visual.loadTexture(file);
+				visual.LoadTexture(file);
 				textureFileName = file;
 				texture1.Text = Path.GetFileName(textureFileName);
 			}
@@ -113,7 +110,7 @@ namespace ShaderForm
 			}
 		}
 
-		private void glControl_Paint(object sender, PaintEventArgs e)
+		private void GlControl_Paint(object sender, PaintEventArgs e)
 		{
 			int width = glControl.Width;
 			int height = glControl.Height;
@@ -124,12 +121,12 @@ namespace ShaderForm
 				height = (int)Math.Round(glControl.Height / g);
 			}
 			catch(Exception) { };
-			visual.update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, height - mousePos.Y, mouseDown, width, height);
-			visual.draw(glControl.Width, glControl.Height);
+			visual.Update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, height - mousePos.Y, mouseDown, width, height);
+			visual.Draw(glControl.Width, glControl.Height);
 			glControl.SwapBuffers();
 		}
 
-		private void glControl_Load(object sender, EventArgs eArgs)
+		private void GlControl_Load(object sender, EventArgs eArgs)
 		{
 			try
 			{
@@ -181,8 +178,8 @@ namespace ShaderForm
 				{
 					shaderFileName = arguments[1];
 				}
-				loadTexture(textureFileName);
-				loadShader(shaderFileName);
+				LoadTexture(textureFileName);
+				LoadShader(shaderFileName);
 			}
 			catch (Exception ex)
 			{
@@ -215,13 +212,13 @@ namespace ShaderForm
 			}
 		}
 
-		private void reload_Click(object sender, EventArgs e)
+		private void Reload_Click(object sender, EventArgs e)
 		{
-			loadTexture(textureFileName);
-			loadShader(shaderFileName);
+			LoadTexture(textureFileName);
+			LoadShader(shaderFileName);
 		}
 
-		private void play_CheckStateChanged(object sender, EventArgs e)
+		private void Play_CheckStateChanged(object sender, EventArgs e)
 		{
 			if (play.Checked)
 			{
@@ -238,7 +235,7 @@ namespace ShaderForm
 			}
 		}
 
-		private void glControl_MouseDown(object sender, MouseEventArgs e)
+		private void GlControl_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (System.Windows.Forms.MouseButtons.Left == e.Button)
 			{
@@ -246,12 +243,12 @@ namespace ShaderForm
 			}
 		}
 
-		private void glControl_MouseMove(object sender, MouseEventArgs e)
+		private void GlControl_MouseMove(object sender, MouseEventArgs e)
 		{
 			mousePos = e.Location;
 		}
 
-		private void glControl_MouseUp(object sender, MouseEventArgs e)
+		private void GlControl_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (System.Windows.Forms.MouseButtons.Left == e.Button)
 			{
@@ -267,7 +264,7 @@ namespace ShaderForm
 			}
 		}
 
-		private void granularity_SelectedIndexChanged(object sender, EventArgs e)
+		private void Granularity_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			glControl.Invalidate();
 		}

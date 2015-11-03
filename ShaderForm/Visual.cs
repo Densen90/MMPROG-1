@@ -65,7 +65,7 @@ namespace ShaderForm
 			texture1 = new Texture();
 		}
 
-		public void update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
+		public void Update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
 		{
 			if (!shader.IsLoaded()) return;
 			surface = GLTools.FBO.Resize(ref surface, width, height);
@@ -88,12 +88,25 @@ namespace ShaderForm
 			surface.EndUpdate();
 		}
 
-		public void loadTexture(string fileName)
+		public void LoadTexture(string fileName)
 		{
 			texture1 = TextureLoader.FromFile(fileName);
 		}
 
-		public void loadFragmentShader(string fileName)
+		public static bool IsTexture(string fileName)
+		{
+			try
+			{
+				TextureLoader.FromFile(fileName);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public void LoadFragmentShader(string fileName)
 		{
 			string sVertexShader = @"
 				#version 130				
@@ -131,7 +144,7 @@ namespace ShaderForm
 			}
 		}
 
-		public void draw(int width, int height)
+		public void Draw(int width, int height)
 		{
 			GL.Viewport(0, 0, width, height);
 			surface.BeginUse();

@@ -55,19 +55,19 @@
 			this.glControl.Size = new System.Drawing.Size(353, 294);
 			this.glControl.TabIndex = 0;
 			this.glControl.VSync = true;
-			this.glControl.Load += new System.EventHandler(this.glControl_Load);
-			this.glControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.glControl_DragDrop);
-			this.glControl.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
-			this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl_Paint);
-			this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseDown);
-			this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseMove);
-			this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.glControl_MouseUp);
+			this.glControl.Load += new System.EventHandler(this.GlControl_Load);
+			this.glControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.GlControl_DragDrop);
+			this.glControl.DragEnter += new System.Windows.Forms.DragEventHandler(this.GlControl_DragEnter);
+			this.glControl.Paint += new System.Windows.Forms.PaintEventHandler(this.GlControl_Paint);
+			this.glControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GlControl_MouseDown);
+			this.glControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GlControl_MouseMove);
+			this.glControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GlControl_MouseUp);
 			// 
 			// fileSystemWatcher
 			// 
 			this.fileSystemWatcher.EnableRaisingEvents = true;
 			this.fileSystemWatcher.SynchronizingObject = this;
-			this.fileSystemWatcher.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Changed);
+			this.fileSystemWatcher.Changed += new System.IO.FileSystemEventHandler(this.FileSystemWatcher_Changed);
 			// 
 			// errorLog
 			// 
@@ -85,12 +85,11 @@
 			this.errorLog.Size = new System.Drawing.Size(353, 294);
 			this.errorLog.TabIndex = 1;
 			this.errorLog.Visible = false;
-			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.glControl_DragDrop);
-			this.errorLog.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
+			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.GlControl_DragDrop);
+			this.errorLog.DragEnter += new System.Windows.Forms.DragEventHandler(this.GlControl_DragEnter);
 			// 
 			// menuStrip
 			// 
-			this.menuStrip.AllowDrop = true;
 			this.menuStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reload,
@@ -104,8 +103,6 @@
 			this.menuStrip.Size = new System.Drawing.Size(353, 27);
 			this.menuStrip.TabIndex = 2;
 			this.menuStrip.Text = "menuStrip1";
-			this.menuStrip.DragDrop += new System.Windows.Forms.DragEventHandler(this.menuStrip_DragDrop);
-			this.menuStrip.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragEnter);
 			// 
 			// reload
 			// 
@@ -116,7 +113,7 @@
 			this.reload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.reload.Size = new System.Drawing.Size(28, 23);
 			this.reload.ToolTipText = "reload shader";
-			this.reload.Click += new System.EventHandler(this.reload_Click);
+			this.reload.Click += new System.EventHandler(this.Reload_Click);
 			// 
 			// play
 			// 
@@ -127,7 +124,7 @@
 			this.play.Name = "play";
 			this.play.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.play.Size = new System.Drawing.Size(28, 23);
-			this.play.CheckStateChanged += new System.EventHandler(this.play_CheckStateChanged);
+			this.play.CheckStateChanged += new System.EventHandler(this.Play_CheckStateChanged);
 			// 
 			// fps
 			// 
@@ -153,7 +150,7 @@
             "4"});
 			this.granularity.Name = "granularity";
 			this.granularity.Size = new System.Drawing.Size(75, 23);
-			this.granularity.SelectedIndexChanged += new System.EventHandler(this.granularity_SelectedIndexChanged);
+			this.granularity.SelectedIndexChanged += new System.EventHandler(this.Granularity_SelectedIndexChanged);
 			// 
 			// texture1
 			// 

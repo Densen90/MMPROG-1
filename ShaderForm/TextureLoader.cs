@@ -19,18 +19,22 @@ namespace GLTools
 				throw new FileLoadException(fileName);
 			}
 
-			Texture texture = new Texture();
-			texture.BeginUse();
-			texture.FilterTrilinear();
-			Bitmap bmp = new Bitmap(fileName);
-			bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-			BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
-			PixelInternalFormat internalFormat = selectInternalPixelFormat(bmp.PixelFormat);
-			OpenTK.Graphics.OpenGL.PixelFormat inputPixelFormat = selectInputPixelFormat(bmp.PixelFormat);
-			texture.LoadPixels(bmpData.Scan0, bmpData.Width, bmpData.Height, internalFormat, inputPixelFormat);
-			bmp.UnlockBits(bmpData);
-			texture.EndUse();
-			return texture;
+			using (Texture texture = new Texture())
+			{
+				texture.BeginUse();
+				texture.FilterTrilinear();
+				using (Bitmap bmp = new Bitmap(fileName))
+				{
+					bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+					BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+					PixelInternalFormat internalFormat = selectInternalPixelFormat(bmp.PixelFormat);
+					OpenTK.Graphics.OpenGL.PixelFormat inputPixelFormat = selectInputPixelFormat(bmp.PixelFormat);
+					texture.LoadPixels(bmpData.Scan0, bmpData.Width, bmpData.Height, internalFormat, inputPixelFormat);
+					bmp.UnlockBits(bmpData);
+				}
+				texture.EndUse();
+				return texture;
+			}
 		}
 
 		private static OpenTK.Graphics.OpenGL.PixelFormat selectInputPixelFormat(System.Drawing.Imaging.PixelFormat pixelFormat)

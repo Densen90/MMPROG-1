@@ -30,8 +30,9 @@ vec3 coordinateRep(vec3 point, vec3 c)
 
 float distScene(vec3 point)
 {
-	float distBox = box(point, vec3(0.0, -1.4, 0.0), vec3(0.6, 0.1, 0.3));
+	point.y += sin(point.z - iGlobalTime * 6.0) * cos(point.x - iGlobalTime) * .25; //waves!
 	float distPlane = plane(point, vec3(0.0, 1.0, 0.0), -0.5);
+	float distBox = box(point, vec3(0.0, -1.4, 0.0), vec3(0.6, 0.1, 0.3));
 	point = coordinateRep(point, vec3(1.0, 1.0, 1.0));
 	float distTorus = torus(point, vec2(0.3, 0.06));
 	float distSphere = sphere(point, vec3(0.0, 0.0, 0.0), 0.2);
@@ -62,10 +63,10 @@ void main()
 	float tanFov = tan(fov / 2.0 * 3.14159 / 180.0) / iResolution.x;
 	vec2 p = tanFov * (gl_FragCoord.xy * 2.0 - iResolution.xy);
 
-	vec3 camP = vec3(0.0, 0.0, -iGlobalTime);
+	vec3 camP = vec3(0.0, 0.0, iGlobalTime);
 	vec3 camDir = normalize(vec3(p.x, p.y, 1.0));
-
-	vec3 point = camP;
+	
+	vec3 point = camP; 	
 	bool objectHit = false;
 	float t = 0.0;
     for(int steps = 0; steps < maxSteps; ++steps)
