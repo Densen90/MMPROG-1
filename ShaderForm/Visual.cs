@@ -68,7 +68,7 @@ namespace ShaderForm
 		public void Update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
 		{
 			if (!shader.IsLoaded()) return;
-			surface = GLTools.FBO.Resize(ref surface, width, height);
+			surface = FBO.Resize(ref surface, width, height);
 			surface.BeginUpdate();
 
 			var resolution = new Vector2(width, height);
@@ -78,6 +78,7 @@ namespace ShaderForm
 			GL.Uniform1(shader.GetUniformLocation("iGlobalTime"), timeSec);
 			GL.Uniform2(shader.GetUniformLocation("iResolution"), resolution);
 			GL.Uniform3(shader.GetUniformLocation("iMouse"), new Vector3(mouseX, mouseY, leftButton ? 1.0f : 0.0f));
+			GL.Uniform1(shader.GetUniformLocation("tex"), 0);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 			GL.BindVertexArray(bufferQuad);
 			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
