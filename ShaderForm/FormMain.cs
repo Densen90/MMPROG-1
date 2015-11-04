@@ -52,7 +52,14 @@ namespace ShaderForm
 
 		private void LoadShader(string fileName)
 		{
-			errorLog.Visible = false;
+            if (string.IsNullOrEmpty(fileName))
+            {
+                errorLog.Text = "No shader specified! Drag and drop to load shader and textures.";
+                errorLog.Visible = true;
+                return;
+            }
+
+            errorLog.Visible = false;
 			//try load new
 			try
 			{
@@ -84,7 +91,7 @@ namespace ShaderForm
 				{
 					timer.Stop();
 					timer.Dispose();
-					LoadShader(fileName);
+					LoadShader(shaderFileName); //if fileName is used here timer will always access fileName of first call and not a potential new one 
 				};
 				timer.Start();
 			}
@@ -267,6 +274,12 @@ namespace ShaderForm
 		private void Granularity_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			glControl.Invalidate();
+		}
+
+		private void errorLog_Resize(object sender, EventArgs e)
+		{
+			var font = errorLog.Font;
+			errorLog.Font = new Font(font.FontFamily, errorLog.Width / 40);
 		}
 	}
 }

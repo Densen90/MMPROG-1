@@ -87,6 +87,7 @@
 			this.errorLog.Visible = false;
 			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.GlControl_DragDrop);
 			this.errorLog.DragEnter += new System.Windows.Forms.DragEventHandler(this.GlControl_DragEnter);
+			this.errorLog.Resize += new System.EventHandler(this.errorLog_Resize);
 			// 
 			// menuStrip
 			// 
