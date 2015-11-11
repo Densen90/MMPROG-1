@@ -1,4 +1,5 @@
-﻿using GLTools;
+﻿using Framework;
+using GLTools;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
