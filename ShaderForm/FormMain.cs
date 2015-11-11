@@ -279,7 +279,8 @@ namespace ShaderForm
 		private void errorLog_Resize(object sender, EventArgs e)
 		{
 			var font = errorLog.Font;
-			errorLog.Font = new Font(font.FontFamily, errorLog.Width / 40);
+			var width = Math.Max(errorLog.Width, 100);
+            errorLog.Font = new Font(font.FontFamily, width / 40);
 		}
 	}
 }

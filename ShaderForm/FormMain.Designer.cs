@@ -196,6 +196,6 @@
 		private System.Windows.Forms.ToolStripMenuItem fps;
 		private System.Windows.Forms.ToolStripComboBox granularity;
 		private System.Windows.Forms.ToolStripMenuItem texture1;
-    }
+	}
 }
 

@@ -3,7 +3,7 @@ uniform float iGlobalTime;
 
 const float epsilon = 0.0001;
 const int maxSteps = 128;
-const vec3 lightPosition = vec3(sin(iGlobalTime), 1.0, cos(iGlobalTime));
+vec3 lightPosition = vec3(sin(iGlobalTime), 1.0, cos(iGlobalTime));
 
 float plane(vec3 point, vec3 normal, float d) {
     return dot(point, normal) - d;
