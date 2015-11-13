@@ -18,6 +18,7 @@ namespace ShaderForm
 		private Shader shader;
 		private Shader shaderCopyToScreen;
 		private FBO surface;
+		private Texture textureSurface;
 
 		public Visual()
 		{
@@ -46,7 +47,8 @@ namespace ShaderForm
 			GL.Disable(EnableCap.DepthTest);
 			GL.ClearColor(1, 0, 0, 0);
 
-			surface = new Framework.FBO(1, 1);
+			surface = new FBO();
+			textureSurface = Texture.Create(1, 1);
 
 			string sVertexShader = @"
 				varying vec2 uv;
@@ -68,8 +70,8 @@ namespace ShaderForm
 		public void Update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
 		{
 			if (!shader.IsLoaded()) return;
-			surface = FBO.Resize(ref surface, width, height);
-			surface.BeginUpdate();
+			UpdateSurfaceSize(width, height);
+			surface.BeginUpdate(textureSurface);
 
 			var resolution = new Vector2(width, height);
 			GL.Viewport(0, 0, width, height);
@@ -148,13 +150,13 @@ namespace ShaderForm
 		public void Draw(int width, int height)
 		{
 			GL.Viewport(0, 0, width, height);
-			surface.BeginUse();
+			textureSurface.BeginUse();
 			shaderCopyToScreen.Begin();
 			GL.BindVertexArray(bufferQuad);
 			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 			GL.BindVertexArray(0);
 			shaderCopyToScreen.End();
-			surface.EndUse();
+			textureSurface.EndUse();
 		}
 
 		public void Dispose()
@@ -162,7 +164,19 @@ namespace ShaderForm
 			shader.Dispose();
 			shaderCopyToScreen.Dispose();
 			texture1.Dispose();
+			textureSurface.Dispose();
 			surface.Dispose();
 		}
+
+		private void UpdateSurfaceSize(int width, int height)
+		{
+			if (width != textureSurface.Width || height != textureSurface.Height)
+			{
+				textureSurface.Dispose();
+				textureSurface = Texture.Create(width, height);
+			}
+		}
+
+
 	}
 }
