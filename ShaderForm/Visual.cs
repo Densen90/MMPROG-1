@@ -1,5 +1,4 @@
 ﻿using Framework;
-using GLTools;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
@@ -47,7 +46,7 @@ namespace ShaderForm
 			GL.Disable(EnableCap.DepthTest);
 			GL.ClearColor(1, 0, 0, 0);
 
-			surface = new GLTools.FBO(1, 1);
+			surface = new Framework.FBO(1, 1);
 
 			string sVertexShader = @"
 				varying vec2 uv;
