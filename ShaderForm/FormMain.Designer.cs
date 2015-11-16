@@ -45,11 +45,9 @@
 			// glControl
 			// 
 			this.glControl.AllowDrop = true;
-			this.glControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.glControl.BackColor = System.Drawing.Color.Black;
-			this.glControl.Location = new System.Drawing.Point(0, 0);
+			this.glControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.glControl.Location = new System.Drawing.Point(0, 27);
 			this.glControl.Margin = new System.Windows.Forms.Padding(4);
 			this.glControl.Name = "glControl";
 			this.glControl.Size = new System.Drawing.Size(353, 294);
@@ -72,11 +70,9 @@
 			// errorLog
 			// 
 			this.errorLog.AllowDrop = true;
-			this.errorLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.errorLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.errorLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.errorLog.Location = new System.Drawing.Point(0, 0);
+			this.errorLog.Location = new System.Drawing.Point(0, 27);
 			this.errorLog.Margin = new System.Windows.Forms.Padding(2);
 			this.errorLog.Multiline = true;
 			this.errorLog.Name = "errorLog";
@@ -91,7 +87,6 @@
 			// 
 			// menuStrip
 			// 
-			this.menuStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reload,
             this.play,
@@ -99,7 +94,7 @@
             this.elapsedTime,
             this.granularity,
             this.texture1});
-			this.menuStrip.Location = new System.Drawing.Point(0, 294);
+			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
 			this.menuStrip.Size = new System.Drawing.Size(353, 27);
 			this.menuStrip.TabIndex = 2;
