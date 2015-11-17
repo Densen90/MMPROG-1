@@ -110,6 +110,7 @@ namespace ShaderForm
 				visual.LoadTexture(file);
 				textureFileName = file;
 				texture1.Text = Path.GetFileName(textureFileName);
+				LoadShader(shaderFileName);
 			}
 			catch(Exception e)
 			{
