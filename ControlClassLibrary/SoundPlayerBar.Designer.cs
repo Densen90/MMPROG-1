@@ -28,8 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.playing = new System.Windows.Forms.CheckBox();
-			this.markerBar1 = new ControlClassLibrary.MarkerBar();
+			this.timerUpdateMarkerBar = new System.Windows.Forms.Timer(this.components);
+			this.markerBarPosition = new ControlClassLibrary.MarkerBar();
 			this.SuspendLayout();
 			// 
 			// playing
@@ -48,33 +50,40 @@
 			this.playing.UseVisualStyleBackColor = true;
 			this.playing.CheckedChanged += new System.EventHandler(this.playing_CheckedChanged);
 			// 
-			// markerBar1
+			// timerUpdateMarkerBar
 			// 
-			this.markerBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.timerUpdateMarkerBar.Interval = 10;
+			this.timerUpdateMarkerBar.Tick += new System.EventHandler(this.timerUpdateMarkerBar_Tick);
+			// 
+			// markerBarPosition
+			// 
+			this.markerBarPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.markerBar1.BackColor = System.Drawing.Color.Gray;
-			this.markerBar1.BarColor = System.Drawing.Color.Green;
-			this.markerBar1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.markerBar1.Cursor = System.Windows.Forms.Cursors.VSplit;
-			this.markerBar1.Decimals = ((byte)(4));
-			this.markerBar1.ForeColor = System.Drawing.Color.White;
-			this.markerBar1.Location = new System.Drawing.Point(28, 0);
-			this.markerBar1.Max = 1F;
-			this.markerBar1.Min = 0F;
-			this.markerBar1.Name = "markerBar1";
-			this.markerBar1.ShowText = false;
-			this.markerBar1.Size = new System.Drawing.Size(749, 34);
-			this.markerBar1.TabIndex = 0;
-			this.markerBar1.Text = "markerBar1";
-			this.markerBar1.Value = 0F;
+			this.markerBarPosition.BackColor = System.Drawing.Color.Gray;
+			this.markerBarPosition.BarColor = System.Drawing.Color.Green;
+			this.markerBarPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.markerBarPosition.Cursor = System.Windows.Forms.Cursors.VSplit;
+			this.markerBarPosition.Decimals = ((byte)(2));
+			this.markerBarPosition.ForeColor = System.Drawing.Color.White;
+			this.markerBarPosition.Location = new System.Drawing.Point(28, 0);
+			this.markerBarPosition.Max = 100F;
+			this.markerBarPosition.Min = 0F;
+			this.markerBarPosition.Name = "markerBarPosition";
+			this.markerBarPosition.ShowText = false;
+			this.markerBarPosition.Size = new System.Drawing.Size(749, 34);
+			this.markerBarPosition.TabIndex = 0;
+			this.markerBarPosition.Text = "markerBar1";
+			this.markerBarPosition.Value = 0F;
+			this.markerBarPosition.ValueChanged += new System.EventHandler(this.markerBar1_ValueChanged);
 			// 
 			// SoundPlayerBar
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.playing);
-			this.Controls.Add(this.markerBar1);
+			this.Controls.Add(this.markerBarPosition);
 			this.Name = "SoundPlayerBar";
 			this.Size = new System.Drawing.Size(777, 34);
 			this.ResumeLayout(false);
@@ -83,7 +92,8 @@
 
 		#endregion
 
-		private MarkerBar markerBar1;
+		private MarkerBar markerBarPosition;
 		private System.Windows.Forms.CheckBox playing;
+		private System.Windows.Forms.Timer timerUpdateMarkerBar;
 	}
 }

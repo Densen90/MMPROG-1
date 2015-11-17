@@ -9,14 +9,13 @@ namespace ShaderForm
 {
 	public partial class FormMain : Form
 	{
-		private Stopwatch sw = new Stopwatch(); // available to all event handlers
 		private Visual visual;
 		private string shaderFileName;
-		private string textureFileName;
-		private long lastTime = 0;
-		private int frames = 0;
+		private string texture1FileName;
+		private string soundFileName;
 		private bool mouseDown = false;
 		private Point mousePos;
+		private Timing timing = new Timing(0.5f);
 
 		public FormMain()
 		{
@@ -39,7 +38,10 @@ namespace ShaderForm
 				}
 				else
 				{
-					LoadShader(file);
+					if (!LoadSound(file))
+					{
+						LoadShader(file);
+					}
 				}
 				return;
 			}
@@ -95,11 +97,6 @@ namespace ShaderForm
 				};
 				timer.Start();
 			}
-			sw.Reset();
-			frames = 0;
-			lastTime = 0;
-			sw.Start();
-			Application_Idle(null, null);
 			glControl.Invalidate();
 		}
 
@@ -108,8 +105,8 @@ namespace ShaderForm
 			try
 			{
 				visual.LoadTexture(file);
-				textureFileName = file;
-				texture1.Text = Path.GetFileName(textureFileName);
+				texture1FileName = file;
+				texture1.Text = Path.GetFileName(texture1FileName);
 				LoadShader(shaderFileName);
 			}
 			catch(Exception e)
@@ -129,9 +126,13 @@ namespace ShaderForm
 				height = (int)Math.Round(glControl.Height / g);
 			}
 			catch(Exception) { };
-			visual.Update(sw.ElapsedMilliseconds / 1000.0f, mousePos.X, height - mousePos.Y, mouseDown, width, height);
+
+			visual.Update(soundPlayerBar1.Position, mousePos.X, height - mousePos.Y, mouseDown, width, height);
 			visual.Draw(glControl.Width, glControl.Height);
 			glControl.SwapBuffers();
+			timing.NewFrame();
+
+			fps.Text = String.Format("{0:0.00}FPS", timing.FPS);
 		}
 
 		private void GlControl_Load(object sender, EventArgs eArgs)
@@ -145,21 +146,6 @@ namespace ShaderForm
 				errorLog.Text = "Error while creating visual (something is seriously wrong)!" + Environment.NewLine + e.Message;
 				errorLog.Visible = true;
 			}
-		}
-
-		void Application_Idle(object sender, EventArgs e)
-		{
-			++frames;
-			long newTime = sw.ElapsedMilliseconds;
-			elapsedTime.Text = String.Format("{0:0.00}", newTime / 1000.0f);
-			long diff = newTime - lastTime;
-			if (diff > 500)
-			{
-				fps.Text = String.Format("{0:0.00}FPS", (1000.0f * frames) / diff);
-				lastTime = newTime;
-				frames = 0;
-			}
-			glControl.Invalidate();
 		}
 
 		private void FormMain_Load(object sender, EventArgs e)
@@ -177,22 +163,34 @@ namespace ShaderForm
 				Top = Convert.ToInt32(keyApp.GetValue("top", Top));
 				Left = Convert.ToInt32(keyApp.GetValue("left", Left));
 				shaderFileName = Convert.ToString(keyApp.GetValue("shaderFileName", ""));
-				textureFileName = Convert.ToString(keyApp.GetValue("textureFileName", ""));
-				play.Checked = Convert.ToBoolean(keyApp.GetValue("play", false));
+				texture1FileName = Convert.ToString(keyApp.GetValue("textureFileName", ""));
+				soundFileName = Convert.ToString(keyApp.GetValue("soundFileName", ""));
+				soundPlayerBar1.Playing = Convert.ToBoolean(keyApp.GetValue("play", false));
 				string granularity = Convert.ToString(keyApp.GetValue("granularity", this.granularity.Text));
-				this.granularity.SelectedIndex = this.granularity.FindString(granularity); 
+				this.granularity.SelectedIndex = this.granularity.FindString(granularity);
 				String[] arguments = Environment.GetCommandLineArgs();
 				if (arguments.Length > 1)
 				{
 					shaderFileName = arguments[1];
 				}
-				LoadTexture(textureFileName);
+				LoadTexture(texture1FileName);
+				LoadSound(soundFileName);
 				LoadShader(shaderFileName);
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		private bool LoadSound(string fileName)
+		{
+			bool success = soundPlayerBar1.LoadSound(fileName, true);
+			if (success)
+			{
+				soundFileName = fileName;
+			}
+			return success;
 		}
 
 		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -210,8 +208,9 @@ namespace ShaderForm
 				keyApp.SetValue("top", Top);
 				keyApp.SetValue("left", Left);
 				keyApp.SetValue("shaderFileName", shaderFileName);
-				keyApp.SetValue("textureFileName", textureFileName);
-				keyApp.SetValue("play", play.Checked);
+				keyApp.SetValue("textureFileName", texture1FileName);
+				keyApp.SetValue("soundFileName", soundFileName);
+				keyApp.SetValue("play", soundPlayerBar1.Playing);
 				keyApp.SetValue("granularity", this.granularity.Text);
 			}
 			catch (Exception ex)
@@ -222,25 +221,7 @@ namespace ShaderForm
 
 		private void Reload_Click(object sender, EventArgs e)
 		{
-			LoadTexture(textureFileName);
 			LoadShader(shaderFileName);
-		}
-
-		private void Play_CheckStateChanged(object sender, EventArgs e)
-		{
-			if (play.Checked)
-			{
-				sw.Start();
-				Application.Idle += Application_Idle;
-				play.Image = global::ShaderForm.Properties.Resources.Pause;
-			}
-			else
-			{
-				sw.Stop();
-				play.Image = global::ShaderForm.Properties.Resources.Play;
-				Application.Idle -= Application_Idle;
-
-			}
 		}
 
 		private void GlControl_MouseDown(object sender, MouseEventArgs e)
@@ -282,6 +263,11 @@ namespace ShaderForm
 			var font = errorLog.Font;
 			var width = Math.Max(errorLog.Width, 100);
             errorLog.Font = new Font(font.FontFamily, width / 40);
+		}
+
+		private void soundPlayerBar1_OnPositionChanged(float position)
+		{
+			glControl.Invalidate();
 		}
 	}
 }

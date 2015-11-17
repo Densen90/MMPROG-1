@@ -33,11 +33,11 @@
 			this.errorLog = new System.Windows.Forms.TextBox();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.reload = new System.Windows.Forms.ToolStripMenuItem();
-			this.play = new System.Windows.Forms.ToolStripMenuItem();
 			this.fps = new System.Windows.Forms.ToolStripMenuItem();
-			this.elapsedTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.granularity = new System.Windows.Forms.ToolStripComboBox();
 			this.texture1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.soundPlayerBar1 = new ControlClassLibrary.SoundPlayerBar();
+			this.texture2 = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -45,12 +45,14 @@
 			// glControl
 			// 
 			this.glControl.AllowDrop = true;
+			this.glControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.glControl.BackColor = System.Drawing.Color.Black;
-			this.glControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.glControl.Location = new System.Drawing.Point(0, 27);
 			this.glControl.Margin = new System.Windows.Forms.Padding(4);
 			this.glControl.Name = "glControl";
-			this.glControl.Size = new System.Drawing.Size(353, 294);
+			this.glControl.Size = new System.Drawing.Size(385, 286);
 			this.glControl.TabIndex = 0;
 			this.glControl.VSync = true;
 			this.glControl.Load += new System.EventHandler(this.GlControl_Load);
@@ -70,7 +72,9 @@
 			// errorLog
 			// 
 			this.errorLog.AllowDrop = true;
-			this.errorLog.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.errorLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.errorLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.errorLog.Location = new System.Drawing.Point(0, 27);
 			this.errorLog.Margin = new System.Windows.Forms.Padding(2);
@@ -78,7 +82,7 @@
 			this.errorLog.Name = "errorLog";
 			this.errorLog.ReadOnly = true;
 			this.errorLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.errorLog.Size = new System.Drawing.Size(353, 294);
+			this.errorLog.Size = new System.Drawing.Size(385, 286);
 			this.errorLog.TabIndex = 1;
 			this.errorLog.Visible = false;
 			this.errorLog.DragDrop += new System.Windows.Forms.DragEventHandler(this.GlControl_DragDrop);
@@ -89,14 +93,13 @@
 			// 
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reload,
-            this.play,
             this.fps,
-            this.elapsedTime,
             this.granularity,
-            this.texture1});
+            this.texture1,
+            this.texture2});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
-			this.menuStrip.Size = new System.Drawing.Size(353, 27);
+			this.menuStrip.Size = new System.Drawing.Size(385, 27);
 			this.menuStrip.TabIndex = 2;
 			this.menuStrip.Text = "menuStrip1";
 			// 
@@ -111,30 +114,12 @@
 			this.reload.ToolTipText = "reload shader";
 			this.reload.Click += new System.EventHandler(this.Reload_Click);
 			// 
-			// play
-			// 
-			this.play.CheckOnClick = true;
-			this.play.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.play.Image = global::ShaderForm.Properties.Resources.Play;
-			this.play.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-			this.play.Name = "play";
-			this.play.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.play.Size = new System.Drawing.Size(28, 23);
-			this.play.CheckStateChanged += new System.EventHandler(this.Play_CheckStateChanged);
-			// 
 			// fps
 			// 
 			this.fps.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 			this.fps.Name = "fps";
 			this.fps.Size = new System.Drawing.Size(38, 23);
 			this.fps.Text = "FPS";
-			// 
-			// elapsedTime
-			// 
-			this.elapsedTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-			this.elapsedTime.Name = "elapsedTime";
-			this.elapsedTime.Size = new System.Drawing.Size(86, 23);
-			this.elapsedTime.Text = "elapsed time";
 			// 
 			// granularity
 			// 
@@ -154,11 +139,31 @@
 			this.texture1.Size = new System.Drawing.Size(61, 23);
 			this.texture1.Text = "texture1";
 			// 
+			// soundPlayerBar1
+			// 
+			this.soundPlayerBar1.AllowDrop = true;
+			this.soundPlayerBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.soundPlayerBar1.Location = new System.Drawing.Point(0, 310);
+			this.soundPlayerBar1.Name = "soundPlayerBar1";
+			this.soundPlayerBar1.Playing = false;
+			this.soundPlayerBar1.Position = 0F;
+			this.soundPlayerBar1.Size = new System.Drawing.Size(385, 29);
+			this.soundPlayerBar1.TabIndex = 3;
+			this.soundPlayerBar1.OnPositionChanged += new ControlClassLibrary.SoundPlayerBar.PositionHandler(this.soundPlayerBar1_OnPositionChanged);
+			// 
+			// texture2
+			// 
+			this.texture2.Name = "texture2";
+			this.texture2.Size = new System.Drawing.Size(61, 23);
+			this.texture2.Text = "texture2";
+			// 
 			// FormMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(353, 321);
+			this.ClientSize = new System.Drawing.Size(385, 339);
+			this.Controls.Add(this.soundPlayerBar1);
 			this.Controls.Add(this.errorLog);
 			this.Controls.Add(this.glControl);
 			this.Controls.Add(this.menuStrip);
@@ -185,12 +190,12 @@
         private System.IO.FileSystemWatcher fileSystemWatcher;
 		private System.Windows.Forms.TextBox errorLog;
 		private System.Windows.Forms.MenuStrip menuStrip;
-		private System.Windows.Forms.ToolStripMenuItem play;
 		private System.Windows.Forms.ToolStripMenuItem reload;
-		private System.Windows.Forms.ToolStripMenuItem elapsedTime;
 		private System.Windows.Forms.ToolStripMenuItem fps;
 		private System.Windows.Forms.ToolStripComboBox granularity;
 		private System.Windows.Forms.ToolStripMenuItem texture1;
+		private ControlClassLibrary.SoundPlayerBar soundPlayerBar1;
+		private System.Windows.Forms.ToolStripMenuItem texture2;
 	}
 }
 

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ControlClassLibrary
@@ -41,11 +36,8 @@ namespace ControlClassLibrary
 			get { return m_fMin; } 
 			set 
 			{
-				this.m_fMin = value;
-				if(this.m_fMin > this.m_fValue)
-				{
-					this.Value = this.m_fMin;
-				}
+				m_fMin = Math.Min(value, Max);
+				Value = Math.Max(Min, Value);
 			} 
 		}
 		
@@ -53,11 +45,8 @@ namespace ControlClassLibrary
 			get { return m_fMax; } 
 			set 
 			{ 
-				this.m_fMax = value;
-				if (this.m_fMax < this.m_fValue)
-				{
-					this.Value = this.m_fMax;
-				}
+				m_fMax = Math.Max(value, Min);
+				Value = Math.Min(Max, Value);
 			}
 		}
 
@@ -109,7 +98,9 @@ namespace ControlClassLibrary
 			e.Graphics.Clear(this.BackColor);
 			using (Brush brush = new SolidBrush(this.BarColor))
 			{
-				float normValue = (Value - Min) / (Max - Min);
+				float diff = Max - Min;
+				if (0 == diff) diff = 1.0f;
+				float normValue = (Value - Min) / diff;
 				int iValue = (int)(normValue * ClientRectangle.Width);
 				e.Graphics.FillRectangle(brush, new Rectangle(Math.Max(iValue - 1, 0), ClientRectangle.Y, 2, ClientRectangle.Height));
 			}
