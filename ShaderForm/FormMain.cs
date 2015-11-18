@@ -11,7 +11,6 @@ namespace ShaderForm
 	{
 		private Visual visual;
 		private string shaderFileName;
-		private string texture1FileName;
 		private string soundFileName;
 		private bool mouseDown = false;
 		private Point mousePos;
@@ -105,13 +104,24 @@ namespace ShaderForm
 			try
 			{
 				visual.LoadTexture(file);
-				texture1FileName = file;
-				texture1.Text = Path.GetFileName(texture1FileName);
-				LoadShader(shaderFileName);
+				texture1.Text = file;
 			}
 			catch(Exception e)
 			{
 				texture1.Text = e.Message;
+			}
+		}
+
+		private void LoadTexture2(string file)
+		{
+			try
+			{
+				visual.LoadTexture2(file);
+				texture2.Text = file;
+			}
+			catch (Exception e)
+			{
+				texture2.Text = e.Message;
 			}
 		}
 
@@ -163,7 +173,8 @@ namespace ShaderForm
 				Top = Convert.ToInt32(keyApp.GetValue("top", Top));
 				Left = Convert.ToInt32(keyApp.GetValue("left", Left));
 				shaderFileName = Convert.ToString(keyApp.GetValue("shaderFileName", ""));
-				texture1FileName = Convert.ToString(keyApp.GetValue("textureFileName", ""));
+				texture1.Text = Convert.ToString(keyApp.GetValue("textureFileName", "texture1"));
+				texture2.Text = Convert.ToString(keyApp.GetValue("texture2FileName", "texture2"));
 				soundFileName = Convert.ToString(keyApp.GetValue("soundFileName", ""));
 				soundPlayerBar1.Playing = Convert.ToBoolean(keyApp.GetValue("play", false));
 				string granularity = Convert.ToString(keyApp.GetValue("granularity", this.granularity.Text));
@@ -173,7 +184,8 @@ namespace ShaderForm
 				{
 					shaderFileName = arguments[1];
 				}
-				LoadTexture(texture1FileName);
+				LoadTexture(texture1.Text);
+				LoadTexture2(texture2.Text);
 				LoadSound(soundFileName);
 				LoadShader(shaderFileName);
 			}
@@ -208,7 +220,8 @@ namespace ShaderForm
 				keyApp.SetValue("top", Top);
 				keyApp.SetValue("left", Left);
 				keyApp.SetValue("shaderFileName", shaderFileName);
-				keyApp.SetValue("textureFileName", texture1FileName);
+				keyApp.SetValue("textureFileName", texture1.Text);
+				keyApp.SetValue("texture2FileName", texture2.Text);
 				keyApp.SetValue("soundFileName", soundFileName);
 				keyApp.SetValue("play", soundPlayerBar1.Playing);
 				keyApp.SetValue("granularity", this.granularity.Text);
@@ -268,6 +281,24 @@ namespace ShaderForm
 		private void soundPlayerBar1_OnPositionChanged(float position)
 		{
 			glControl.Invalidate();
+		}
+
+		private void texture1_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			if (DialogResult.OK == dlg.ShowDialog())
+			{
+				LoadTexture(dlg.FileName);
+			}
+		}
+
+		private void texture2_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			if (DialogResult.OK == dlg.ShowDialog())
+			{
+				LoadTexture2(dlg.FileName);
+			}
 		}
 	}
 }

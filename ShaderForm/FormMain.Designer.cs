@@ -36,8 +36,8 @@
 			this.fps = new System.Windows.Forms.ToolStripMenuItem();
 			this.granularity = new System.Windows.Forms.ToolStripComboBox();
 			this.texture1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.soundPlayerBar1 = new ControlClassLibrary.SoundPlayerBar();
 			this.texture2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.soundPlayerBar1 = new ControlClassLibrary.SoundPlayerBar();
 			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -138,6 +138,14 @@
 			this.texture1.Name = "texture1";
 			this.texture1.Size = new System.Drawing.Size(61, 23);
 			this.texture1.Text = "texture1";
+			this.texture1.Click += new System.EventHandler(this.texture1_Click);
+			// 
+			// texture2
+			// 
+			this.texture2.Name = "texture2";
+			this.texture2.Size = new System.Drawing.Size(61, 23);
+			this.texture2.Text = "texture2";
+			this.texture2.Click += new System.EventHandler(this.texture2_Click);
 			// 
 			// soundPlayerBar1
 			// 
@@ -151,12 +159,6 @@
 			this.soundPlayerBar1.Size = new System.Drawing.Size(385, 29);
 			this.soundPlayerBar1.TabIndex = 3;
 			this.soundPlayerBar1.OnPositionChanged += new ControlClassLibrary.SoundPlayerBar.PositionHandler(this.soundPlayerBar1_OnPositionChanged);
-			// 
-			// texture2
-			// 
-			this.texture2.Name = "texture2";
-			this.texture2.Size = new System.Drawing.Size(61, 23);
-			this.texture2.Text = "texture2";
 			// 
 			// FormMain
 			// 

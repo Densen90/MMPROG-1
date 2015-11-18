@@ -15,6 +15,7 @@ namespace ShaderForm
 	{
 		private int bufferQuad;
 		private Texture texture1;
+		private Texture texture2;
 		private Shader shader;
 		private Shader shaderCopyToScreen;
 		private FBO surface;
@@ -65,6 +66,7 @@ namespace ShaderForm
 			shaderCopyToScreen = Shader.LoadFromStrings(sVertexShader, sFragmentShd);
 			shader = new Shader();
 			texture1 = new Texture();
+			texture2 = new Texture();
 		}
 
 		public void Update(float timeSec, int mouseX, int mouseY, bool leftButton, int width, int height)
@@ -76,16 +78,21 @@ namespace ShaderForm
 			var resolution = new Vector2(width, height);
 			GL.Viewport(0, 0, width, height);
 			texture1.BeginUse();
+			GL.ActiveTexture(TextureUnit.Texture1);
+			texture2.BeginUse();
 			shader.Begin();
 			GL.Uniform1(shader.GetUniformLocation("iGlobalTime"), timeSec);
 			GL.Uniform2(shader.GetUniformLocation("iResolution"), resolution);
 			GL.Uniform3(shader.GetUniformLocation("iMouse"), new Vector3(mouseX, mouseY, leftButton ? 1.0f : 0.0f));
 			GL.Uniform1(shader.GetUniformLocation("tex"), 0);
+			GL.Uniform1(shader.GetUniformLocation("tex2"), 1);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 			GL.BindVertexArray(bufferQuad);
 			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 			GL.BindVertexArray(0);
 			shader.End();
+			texture2.EndUse();
+			GL.ActiveTexture(TextureUnit.Texture0);
 			texture1.EndUse();
 
 			surface.EndUpdate();
@@ -94,6 +101,11 @@ namespace ShaderForm
 		public void LoadTexture(string fileName)
 		{
 			texture1 = TextureLoader.FromFile(fileName);
+		}
+
+		public void LoadTexture2(string fileName)
+		{
+			texture2 = TextureLoader.FromFile(fileName);
 		}
 
 		public static bool IsTexture(string fileName)
@@ -163,6 +175,7 @@ namespace ShaderForm
 		{
 			shader.Dispose();
 			shaderCopyToScreen.Dispose();
+			texture2.Dispose();
 			texture1.Dispose();
 			textureSurface.Dispose();
 			surface.Dispose();
